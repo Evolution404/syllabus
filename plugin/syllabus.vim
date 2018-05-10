@@ -1,7 +1,7 @@
 "------------------------------------------------------------------------------
 "  <从教务处获取课程表并显示>
 "------------------------------------------------------------------------------
-func! GetClassList()
+func! GetClassList(index)
 	new 课程表 
 	setlocal buftype=nowrite
 	setlocal nobuflisted
@@ -11,15 +11,21 @@ py3<< eof
 import requests
 from pyquery import PyQuery as pq
 import prettytable as pt
-#data = {
-#    'stuid':160710313,
-#    'pwd':972451804
-#}
+import time
+import datetime
+index = vim.eval('a:index')
 data = {
-    'stuid':160710204,
-    'pwd':'lyhen51920'
+	'stuid':vim.eval('g:stuid[{}]'.format(index)),
+	'pwd':vim.eval('g:stupwd[{}]'.format(index))
 }
-thisWeek=11
+beginDay = vim.eval('g:schoolTermStart')
+today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+beginDay=time.strptime(beginDay,"%Y-%m-%d")
+today=time.strptime(today,"%Y-%m-%d")
+beginDay=datetime.datetime(beginDay[0],beginDay[1],beginDay[2])
+today=datetime.datetime(today[0],today[1],today[2])
+days = int(str(today-beginDay).split(' ')[0])
+thisWeek=int(days/7)+1
 response = requests.post('http://222.194.15.1:7777/pls/wwwbks/bks_login2.login',data=data,allow_redirects=False)
 cookie = response.headers['Set-Cookie']
 head={'Cookie':cookie}
