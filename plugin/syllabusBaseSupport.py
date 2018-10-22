@@ -102,6 +102,6 @@ def showClassList(thisWeek=parseThisWeek()):
     cb = vim.current.buffer
     cw = vim.current.window
     rs = str(tb).split('\n')
-    rs.insert(0, '当前第{}周'.format(thisWeek))
+    rs.insert(0, '本周是第{}周---当前显示第{}周'.format(parseThisWeek(), thisWeek))
     cw.height = len(rs)
     cb[:] = rs

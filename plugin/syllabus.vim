@@ -7,12 +7,12 @@ func! GetClassList(index)
 	setlocal buftype=nowrite
 	setlocal nobuflisted
 	set nowrap
-    map q :q<cr>
-    " n,j下一周; p,h上一周
-    map n :call <SID>NextWeek()<cr>
-    map p :call <SID>PrevWeek()<cr>
-    map h :call <SID>PrevWeek()<cr>
-    map j :call <SID>NextWeek()<cr>
+    map <buffer> q :q<cr>
+    " n,j下一周; p,k上一周
+    map <buffer> n :call <SID>NextWeek()<cr>
+    map <buffer> p :call <SID>PrevWeek()<cr>
+    map <buffer> k :call <SID>PrevWeek()<cr>
+    map <buffer> j :call <SID>NextWeek()<cr>
     let s:currentPerson = a:index
     call s:DrawTable()
 endf
