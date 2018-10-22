@@ -7,15 +7,14 @@ func! GetClassList(index)
 	setlocal buftype=nowrite
 	setlocal nobuflisted
 	set nowrap
-	set ma
-py3<< eof
-import vim
-sys.path.append(vim.eval('s:syllabusPythonFilePath'))
-import syllabusBaseSupport
-syllabusBaseSupport.setData(vim.eval('a:index'))
-syllabusBaseSupport.showClassList()
-eof
-set noma
+    map q :q<cr>
+    " n,j下一周; p,h上一周
+    map n :call <SID>NextWeek()<cr>
+    map p :call <SID>PrevWeek()<cr>
+    map h :call <SID>PrevWeek()<cr>
+    map j :call <SID>NextWeek()<cr>
+    let s:currentPerson = a:index
+    call s:DrawTable()
 endf
 
 "强制从网页上获取刷新数据
@@ -31,19 +30,29 @@ eof
 set noma
 endf
 
-"强制从网页上获取刷新数据
-func! NextGetClassList(index)
-	new 课程表 
-	setlocal buftype=nowrite
-	setlocal nobuflisted
-	set nowrap
-	set ma
+func! <SID>NextWeek()
+    let s:currentWeek += 1
+    call s:DrawTable()
+endf
+
+func! <SID>PrevWeek()
+    let s:currentWeek -= 1
+    call s:DrawTable()
+endf
+
+func! s:DrawTable()
+set ma
 py3<< eof
 import vim
 sys.path.insert(0,vim.eval('s:syllabusPythonFilePath'))
 import syllabusBaseSupport
-syllabusBaseSupport.setData(vim.eval('a:index'))
-syllabusBaseSupport.showClassList(syllabusBaseSupport.parseThisWeek()+1)
+eof
+if !exists('s:currentWeek')
+    let s:currentWeek = py3eval('syllabusBaseSupport.parseThisWeek()')
+endif
+py3<< eof
+syllabusBaseSupport.setData(vim.eval('s:currentPerson'))
+syllabusBaseSupport.showClassList(int(vim.eval('s:currentWeek')))
 eof
 set noma
 endf
