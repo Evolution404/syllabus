@@ -13,12 +13,13 @@ filePath = ''
 def setData(index):
     global data
     global filePath
+    global dataDirPath
     data = {
         'stuid': vim.eval('g:stuid[{}]'.format(index)),
         'pwd': vim.eval('g:stupwd[{}]'.format(index))
     }
-    filePath = vim.eval('s:syllabusPythonFilePath') + \
-        '/data/'+data['stuid']+'.txt'
+    dataDirPath = vim.eval('s:syllabusPythonFilePath') + '/data'
+    filePath = dataDirPath + '/' + data['stuid'] + '.txt'
 
 
 def parseThisWeek():
@@ -72,8 +73,8 @@ def getClassListFromWeb():
             'weeks': weeks,
         }
         classList.append(oneClassData)
-    if not os.path.exists('data'):
-        os.mkdir('data')
+    if not os.path.exists(dataDirPath):
+        os.mkdir(dataDirPath)
     with open(filePath, 'w') as file:
         file.write(str(classList))
     print('获取成功')
