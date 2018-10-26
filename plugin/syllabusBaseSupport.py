@@ -72,6 +72,8 @@ def getClassListFromWeb():
             'weeks': weeks,
         }
         classList.append(oneClassData)
+    if not os.path.exists('data'):
+        os.mkdir('data')
     with open(filePath, 'w') as file:
         file.write(str(classList))
     print('获取成功')
